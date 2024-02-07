@@ -9,8 +9,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Tag } from 'src/tag/tag.entity';
-import { User } from 'src/user/user.entity';
+import { Tag } from '../tag/tag.entity';
+import { User } from '../user/user.entity';
 
 @Entity()
 export class Article {

@@ -1,6 +1,6 @@
 import {
-  ForbiddenException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -13,6 +13,7 @@ import { UpdateUserDto } from './dto/update-user-dto';
 import {
   AUTHENTICATION_ERROR,
   EXISTED_USER_ERROR,
+  FOLLOW_SAME_USER_ERROR,
   INVALID_USER_PASSWORD_ERROR,
   NOT_EXISTED_USER_ERROR,
 } from './user.constants';
@@ -104,5 +105,56 @@ export class UserService {
     });
 
     return user;
+  }
+
+  public async getUserByUsername(username: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { username },
+      relations: {
+        followers: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
+  }
+
+  public async addFollower(
+    username: string,
+    currentUserEmail: string,
+  ): Promise<User> {
+    const [user, currentUser] = await Promise.all([
+      this.getUserByUsername(username),
+      this.getUserByEmail(currentUserEmail),
+    ]);
+
+    if (user.id === currentUser.id) {
+      throw new UnprocessableEntityException(FOLLOW_SAME_USER_ERROR);
+    }
+
+    if (user.followers.some((u) => u.id === currentUser.id)) {
+      return user;
+    }
+
+    user.followers.push(currentUser);
+
+    return this.userRepository.save(user);
+  }
+
+  public async deleteFollower(
+    username: string,
+    currentUserEmail: string,
+  ): Promise<User> {
+    const [user, currentUser] = await Promise.all([
+      this.getUserByUsername(username),
+      this.getUserByEmail(currentUserEmail),
+    ]);
+
+    user.followers = user.followers.filter((u) => u.id !== currentUser.id);
+
+    return this.userRepository.save(user);
   }
 }

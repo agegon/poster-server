@@ -23,14 +23,14 @@ import { mapUserSchema } from './user.mappers';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user-dto';
 
-@Controller('user')
+@Controller()
 export class UserController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
   ) {}
 
-  @Post()
+  @Post('users')
   async registerUser(
     @Body(new ValidationPipe()) userDto: CreateUserDto,
   ): Promise<IUserResponseSchema> {
@@ -43,7 +43,7 @@ export class UserController {
     };
   }
 
-  @Post('login')
+  @Post('users/login')
   @HttpCode(HttpStatus.OK)
   async loginUser(
     @Body(new ValidationPipe()) userDto: LoginUserDto,
@@ -57,7 +57,7 @@ export class UserController {
     };
   }
 
-  @Get()
+  @Get('user')
   @UseGuards(new JwtAuthGuard())
   async getCurrentUser(
     @User() authUser: IAuthUser,
@@ -72,7 +72,7 @@ export class UserController {
     };
   }
 
-  @Patch()
+  @Patch('user')
   @UseGuards(new JwtAuthGuard())
   async updateCurrentUser(
     @Body(new ValidationPipe({ transform: true, whitelist: true }))

@@ -6,6 +6,7 @@ import { ArticleModule } from './article/article.module';
 import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { getTypeORMConfig } from './configs/database';
+import { ProfileModule } from './profile/profile.module';
 import { TagModule } from './tag/tag.module';
 import { UserModule } from './user/user.module';
 
@@ -20,6 +21,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     ArticleModule,
     CommentModule,
+    ProfileModule,
     TagModule,
     UserModule,
   ],
