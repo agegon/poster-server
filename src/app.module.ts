@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ArticleModule } from './article/article.module';
@@ -18,6 +19,7 @@ import { UserModule } from './user/user.module';
       useFactory: getTypeORMConfig,
       inject: [ConfigService],
     }),
+    ScheduleModule.forRoot(),
     AuthModule,
     ArticleModule,
     CommentModule,

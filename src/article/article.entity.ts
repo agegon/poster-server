@@ -42,7 +42,7 @@ export class Article {
   @JoinTable()
   favorite: User[];
 
-  @ManyToMany(() => Tag, { eager: true })
+  @ManyToMany(() => Tag, (tag) => tag.articles, { eager: true })
   @JoinTable()
   tags: Tag[];
 }
