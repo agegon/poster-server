@@ -1,0 +1,9 @@
+# compiled output
+/dist
+/node_modules
+
+# ENV
+.env
+
+# Local database
+pgdata
