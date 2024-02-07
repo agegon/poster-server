@@ -26,9 +26,6 @@ export class CommentService {
       where: {
         article: { slug },
       },
-      relations: {
-        author: true,
-      },
     });
   }
 
@@ -60,9 +57,6 @@ export class CommentService {
       where: {
         id,
         article: { slug },
-      },
-      relations: {
-        author: true,
       },
     });
 

@@ -35,14 +35,14 @@ export class Article {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   author: User;
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, { eager: true })
   @JoinTable()
   favorite: User[];
 
-  @ManyToMany(() => Tag)
+  @ManyToMany(() => Tag, { eager: true })
   @JoinTable()
   tags: Tag[];
 }

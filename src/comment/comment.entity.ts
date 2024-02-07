@@ -18,10 +18,10 @@ export class Comment {
   @Column()
   body: string;
 
-  @ManyToOne(() => Article)
+  @ManyToOne(() => Article, { onDelete: 'CASCADE' })
   article: Article;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   author: User;
 
   @CreateDateColumn()

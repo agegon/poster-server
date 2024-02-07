@@ -1,16 +1,15 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
-import { toBoolean, toNumber } from 'src/utils/transformers';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { toNumber } from 'src/utils/transformers';
 
 export class GetAllArticlesDto {
   @IsOptional()
   @IsString()
   author: string;
 
-  @Transform(toBoolean)
   @IsOptional()
-  @IsBoolean()
-  favorited: boolean;
+  @IsString()
+  favorite_for: string;
 
   @Transform(toNumber)
   @IsNumber()

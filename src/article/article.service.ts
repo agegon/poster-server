@@ -34,24 +34,12 @@ export class ArticleService {
       take: dto.limit,
       skip: dto.offset,
       where: {
-        author:
-          'author' in dto && !('favorited' in dto)
-            ? { username: dto.author }
-            : undefined,
-        // TODO: Add favorite_for_user field as username for searching favorite for certain user
-        favorite:
-          'author' in dto && 'favorited' in dto
-            ? { username: dto.author }
-            : undefined,
-        tags: 'tag' in dto ? { name: dto.tag } : undefined,
+        author: dto.author ? { username: dto.author } : undefined,
+        favorite: dto.favorite_for ? { username: dto.favorite_for } : undefined,
+        tags: dto.tag ? { name: dto.tag } : undefined,
       },
       order: {
         createdAt: 'DESC',
-      },
-      relations: {
-        author: true,
-        favorite: true,
-        tags: true,
       },
     });
 
@@ -77,11 +65,6 @@ export class ArticleService {
       order: {
         createdAt: 'DESC',
       },
-      relations: {
-        author: true,
-        favorite: true,
-        tags: true,
-      },
     });
 
     return { articles, count };
@@ -91,11 +74,6 @@ export class ArticleService {
     const article = await this.articleRepository.findOne({
       where: {
         slug,
-      },
-      relations: {
-        author: true,
-        favorite: true,
-        tags: true,
       },
     });
 
@@ -163,11 +141,6 @@ export class ArticleService {
   ): Promise<Article> {
     const article = await this.articleRepository.findOne({
       where: { slug },
-      relations: {
-        author: true,
-        favorite: true,
-        tags: true,
-      },
     });
 
     if (!article) {
@@ -222,11 +195,6 @@ export class ArticleService {
   ): Promise<Article> {
     const article = await this.articleRepository.findOne({
       where: { slug },
-      relations: {
-        author: true,
-        favorite: true,
-        tags: true,
-      },
     });
 
     if (!article) {
@@ -247,11 +215,6 @@ export class ArticleService {
     const [article, user] = await Promise.all([
       this.articleRepository.findOne({
         where: { slug },
-        relations: {
-          author: true,
-          favorite: true,
-          tags: true,
-        },
       }),
       this.userService.getUserByEmail(userEmail),
     ]);
@@ -279,11 +242,6 @@ export class ArticleService {
   ): Promise<Article> {
     const article = await this.articleRepository.findOne({
       where: { slug },
-      relations: {
-        author: true,
-        favorite: true,
-        tags: true,
-      },
     });
 
     if (!article) {
