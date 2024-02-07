@@ -31,6 +31,18 @@ export class ArticleService {
     return this.articleRepository.find({
       take: dto.limit,
       skip: dto.offset,
+      where: {
+        author:
+          'author' in dto && !('favorited' in dto)
+            ? { username: dto.author }
+            : undefined,
+        // TODO: Add favorite_for_user field as username for searching favorite for certain user
+        favorite:
+          'author' in dto && 'favorited' in dto
+            ? { username: dto.author }
+            : undefined,
+        tags: 'tag' in dto ? { name: dto.tag } : undefined,
+      },
       order: {
         createdAt: 'DESC',
       },

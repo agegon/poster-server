@@ -3,10 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ArticleModule } from './article/article.module';
-import { getTypeORMConfig } from './configs/database';
-import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { CommentModule } from './comment/comment.module';
+import { getTypeORMConfig } from './configs/database';
 import { TagModule } from './tag/tag.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -16,10 +17,11 @@ import { TagModule } from './tag/tag.module';
       useFactory: getTypeORMConfig,
       inject: [ConfigService],
     }),
-    ArticleModule,
-    UserModule,
     AuthModule,
+    ArticleModule,
+    CommentModule,
     TagModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
