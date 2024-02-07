@@ -1,7 +1,7 @@
+import { UserSchema } from './schemas/user';
 import { User } from './user.entity';
-import { IUserSchema } from './user.interfaces';
 
-export const mapUserSchema = (user: User): IUserSchema => {
+export const mapUserSchema = (user: User): UserSchema => {
   return {
     bio: user.bio,
     email: user.email,

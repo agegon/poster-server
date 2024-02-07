@@ -1,11 +1,11 @@
 import { mapUserSchema } from 'src/user/user.mappers';
 import { Article } from './article.entity';
-import { IArticleSchema } from './article.interfaces';
+import { ArticleSchema } from './schemas/article';
 
 export const mapArticleSchema = (
   article: Article,
   currentUserEmail?: string,
-): IArticleSchema => {
+): ArticleSchema => {
   return {
     author: mapUserSchema(article.author),
     body: article.body,

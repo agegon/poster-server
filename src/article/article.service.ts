@@ -10,10 +10,10 @@ import { Tag } from 'src/tag/tag.entity';
 import { UserService } from 'src/user/user.service';
 
 import { Article } from './article.entity';
-import { CreateArticleDto } from './dto/create-article-dto';
-import { GetAllArticlesDto } from './dto/get-all-articles-dto';
-import { UpdateArticleDto } from './dto/update-article-dto';
-import { GetFeedArticlesDto } from './dto/get-feed-articles-dto';
+import { CreateArticleDto } from './dto/create-article.dto';
+import { GetAllArticlesDto } from './dto/get-all-articles.dto';
+import { UpdateArticleDto } from './dto/update-article.dto';
+import { GetFeedArticlesDto } from './dto/get-feed-articles.dto';
 import { slugify } from 'src/utils/slug';
 
 @Injectable()

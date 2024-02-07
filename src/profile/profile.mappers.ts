@@ -1,10 +1,10 @@
 import { User } from 'src/user/user.entity';
-import { IProfileSchema } from './profile.interfaces';
+import { ProfileSchema } from './schemas/profile';
 
 export const mapProfileSchema = (
   user: User,
   currentUserEmail?: string,
-): IProfileSchema => {
+): ProfileSchema => {
   return {
     bio: user.bio,
     id: user.id,

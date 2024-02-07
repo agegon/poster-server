@@ -1,8 +1,8 @@
 import { mapUserSchema } from 'src/user/user.mappers';
 import { Comment } from './comment.entity';
-import { ICommentSchema } from './comment.interfaces';
+import { CommentSchema } from './schemas/comment';
 
-export const mapCommentSchema = (comment: Comment): ICommentSchema => {
+export const mapCommentSchema = (comment: Comment): CommentSchema => {
   return {
     author: mapUserSchema(comment.author),
     body: comment.body,
