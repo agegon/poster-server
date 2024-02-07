@@ -11,10 +11,6 @@ export class CreateArticleDto {
 
   @IsString()
   @MinLength(1)
-  slug: string;
-
-  @IsString()
-  @MinLength(1)
   title: string;
 
   @IsOptional()

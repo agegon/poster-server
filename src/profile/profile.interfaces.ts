@@ -5,3 +5,7 @@ export interface IProfileSchema {
   image?: string;
   username: string;
 }
+
+export interface IProfileResponseSchema {
+  profile: IProfileSchema;
+}

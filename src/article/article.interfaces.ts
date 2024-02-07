@@ -1,6 +1,6 @@
 import { IUserSchema } from 'src/user/user.interfaces';
 
-export interface IArticleResponseSchema {
+export interface IArticleSchema {
   author: IUserSchema;
   createdAt: string;
   body: string;
@@ -12,4 +12,13 @@ export interface IArticleResponseSchema {
   tags: string[];
   title: string;
   updatedAt: string;
+}
+
+export interface IArticlesResponseSchema {
+  articles: IArticleSchema[];
+  articlesCount: number;
+}
+
+export interface IArticleResponseSchema {
+  article: IArticleSchema;
 }

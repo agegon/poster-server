@@ -157,4 +157,12 @@ export class UserService {
 
     return this.userRepository.save(user);
   }
+
+  public async getFollowingUsersByEmail(email: string): Promise<User[]> {
+    return this.userRepository.find({
+      where: {
+        followers: { email },
+      },
+    });
+  }
 }

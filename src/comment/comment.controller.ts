@@ -13,7 +13,10 @@ import { IAuthUser } from 'src/auth/auth.interfaces';
 import { User } from 'src/auth/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
-import { ICommentSchema } from './comment.interfaces';
+import {
+  ICommentResponseSchema,
+  ICommentsResponseSchema,
+} from './comment.interfaces';
 import { mapCommentSchema } from './comment.mappers';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -25,10 +28,12 @@ export class CommentController {
   @Get()
   public async getComments(
     @Param('slug') slug: string,
-  ): Promise<ICommentSchema[]> {
+  ): Promise<ICommentsResponseSchema> {
     const comments = await this.commentService.getCommentsByArticle(slug);
 
-    return comments.map(mapCommentSchema);
+    return {
+      comments: comments.map(mapCommentSchema),
+    };
   }
 
   @Post()
@@ -38,14 +43,16 @@ export class CommentController {
     commentDto: CreateCommentDto,
     @Param('slug') slug: string,
     @User() user: IAuthUser,
-  ): Promise<ICommentSchema> {
+  ): Promise<ICommentResponseSchema> {
     const comment = await this.commentService.addComment(
       commentDto,
       slug,
       user.email,
     );
 
-    return mapCommentSchema(comment);
+    return {
+      comment: mapCommentSchema(comment),
+    };
   }
 
   @Delete(':id')
@@ -54,13 +61,15 @@ export class CommentController {
     @Param('id', ParseIntPipe) id: number,
     @Param('slug') slug: string,
     @User() user: IAuthUser,
-  ): Promise<ICommentSchema> {
+  ): Promise<ICommentResponseSchema> {
     const comment = await this.commentService.deleteComment(
       id,
       slug,
       user.email,
     );
 
-    return mapCommentSchema(comment);
+    return {
+      comment: mapCommentSchema(comment),
+    };
   }
 }

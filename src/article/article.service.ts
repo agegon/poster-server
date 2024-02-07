@@ -2,7 +2,6 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, In, Repository } from 'typeorm';
@@ -10,11 +9,12 @@ import { DataSource, In, Repository } from 'typeorm';
 import { Tag } from 'src/tag/tag.entity';
 import { UserService } from 'src/user/user.service';
 
-import { EXISTED_ARTICLE_SLUG_ERROR } from './article.constants';
 import { Article } from './article.entity';
 import { CreateArticleDto } from './dto/create-article-dto';
 import { GetAllArticlesDto } from './dto/get-all-articles-dto';
 import { UpdateArticleDto } from './dto/update-article-dto';
+import { GetFeedArticlesDto } from './dto/get-feed-articles-dto';
+import { slugify } from 'src/utils/slug';
 
 @Injectable()
 export class ArticleService {
@@ -27,8 +27,10 @@ export class ArticleService {
     private userService: UserService,
   ) {}
 
-  public async getAllArticles(dto: GetAllArticlesDto): Promise<Article[]> {
-    return this.articleRepository.find({
+  public async getAllArticles(
+    dto: GetAllArticlesDto,
+  ): Promise<{ articles: Article[]; count: number }> {
+    const [articles, count] = await this.articleRepository.findAndCount({
       take: dto.limit,
       skip: dto.offset,
       where: {
@@ -52,6 +54,37 @@ export class ArticleService {
         tags: true,
       },
     });
+
+    return { articles, count };
+  }
+
+  public async getFeedArticles(
+    dto: GetFeedArticlesDto,
+    currentUserEmail: string,
+  ): Promise<{ articles: Article[]; count: number }> {
+    const followingUsers = await this.userService.getFollowingUsersByEmail(
+      currentUserEmail,
+    );
+
+    const [articles, count] = await this.articleRepository.findAndCount({
+      take: dto.limit,
+      skip: dto.offset,
+      where: {
+        author: {
+          email: In(followingUsers.map((u) => u.email)),
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+      relations: {
+        author: true,
+        favorite: true,
+        tags: true,
+      },
+    });
+
+    return { articles, count };
   }
 
   public async getArticleBySlug(slug: string): Promise<Article | null> {
@@ -78,17 +111,11 @@ export class ArticleService {
     userEmail: string,
   ): Promise<Article> {
     const author = await this.userService.getUserByEmail(userEmail);
-    const existedArticle = await this.articleRepository.findOne({
-      where: { slug: articleDto.slug },
-    });
-
-    if (existedArticle) {
-      throw new UnprocessableEntityException(EXISTED_ARTICLE_SLUG_ERROR);
-    }
 
     const article = this.articleRepository.create({
       ...articleDto,
       author,
+      slug: slugify(articleDto.title),
       favorite: [],
       tags: [],
     });

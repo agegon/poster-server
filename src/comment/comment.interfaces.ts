@@ -7,3 +7,11 @@ export interface ICommentSchema {
   id: number;
   updatedAt: string;
 }
+
+export interface ICommentResponseSchema {
+  comment: ICommentSchema;
+}
+
+export interface ICommentsResponseSchema {
+  comments: ICommentSchema[];
+}
